@@ -1,6 +1,3 @@
-%Changes
-
-
 function [] = draw_object(mainAxis, object, mousePos)
 %draw_object draws a graphics object on a set of axes
 %Input arguments
