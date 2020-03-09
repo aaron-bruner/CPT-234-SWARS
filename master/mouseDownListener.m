@@ -24,7 +24,7 @@ global left_button;
         case 'extend'
             %put code here
         case 'alt'
-            draw_object(mainAxis, object, get_mouse_position());
+            %draw_object(mainAxis, object, get_mouse_position());
         case 'open'
             %put code here
     end
