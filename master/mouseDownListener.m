@@ -7,16 +7,6 @@ function [] = mouseDownListener(src, ~)
 %       'extend' : shift+click left OR both button clicked
 %       'alt'    : ctrl+click left OR click right
 %       'open'   : double click any mouse button
-%       On Linux, this means:
-%       'normal' : left mouse button clicked
-%       'extend' : shift+click left OR click middle
-%       'alt'    : ctrl+click left OR click right
-%       'open'   : double click any mouse button
-%       On Mac, this means:
-%       'normal' : left mouse button clicked
-%       'extend' : shift+click left OR click middle OR click both
-%       'alt'    : ctrl+click left OR click right
-%       'open'   : double click any mouse button
 %Output arguments
 %   none
 %Notes
@@ -34,7 +24,21 @@ global left_button;
         case 'extend'
             %put code here
         case 'alt'
-            %put code here
+            draw_object(mainAxis, object, get_mouse_position());
         case 'open'
             %put code here
     end
+    
+    
+    
+    
+%       On Linux, this means:
+%       'normal' : left mouse button clicked
+%       'extend' : shift+click left OR click middle
+%       'alt'    : ctrl+click left OR click right
+%       'open'   : double click any mouse button
+%       On Mac, this means:
+%       'normal' : left mouse button clicked
+%       'extend' : shift+click left OR click middle OR click both
+%       'alt'    : ctrl+click left OR click right
+%       'open'   : double click any mouse button
