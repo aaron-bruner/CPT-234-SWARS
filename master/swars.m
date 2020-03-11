@@ -1,29 +1,25 @@
 function [] = swars(player)
-%%%%%%%%%
-close all
-clear all
-clc
-%%%%%%%%%
+
+clear;clc
+
 global quitGame;
 quitGame = false;
+global right_button;
 
 [mainAxis, ship, axisTitle] = initialize_graphics();
 print_title(axisTitle, 'SWARS');
-
-while ~quitGame
-    
-    pause(0.025);
-    
-    pos = get_mouse_position(mainAxis);
-
-    object = struct('outline',ship.outline,'patch',ship.patch,'w',ship.w,'h',ship.h);   
-    draw_object(mainAxis, object, pos);
+shipPos = [100 50];
+draw_object(mainAxis, ship, shipPos);
+while ~quitGame    
+pause(0.025);
+    if right_button == true
+        right_button = false;
+        mousePos = get_mouse_position(mainAxis);
+        [shipPos] = moveObject(mousePos,shipPos, mainAxis, ship);
+    end
 
 end % End while loop
 
-% END OF GAME SCREEN %
 print_title(axisTitle, 'GAME OVER');
-pause(1.0);
-%%%%%%%%%%%%%%%%%%%%%%
 
 end % End for swars function
