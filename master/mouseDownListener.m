@@ -16,15 +16,14 @@ function [] = mouseDownListener(src, ~)
 %   its input arguments are supplied by the figure.  The
 %   main usage would be to allow setting of a global variable
 %   to detect which mouse button was clicked.
-global left_button;
+global right_button;
     switch src.SelectionType
         case 'normal'
             %put code here
-            left_button = true;
         case 'extend'
             %put code here
         case 'alt'
-            %draw_object(mainAxis, object, get_mouse_position());
+            right_button = true;
         case 'open'
             %put code here
     end
