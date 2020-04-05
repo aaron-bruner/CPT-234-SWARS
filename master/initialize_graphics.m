@@ -23,7 +23,6 @@ yScale = ship.h / max(SHIP_SHAPE(2,:));
 %scale hero so that he's HERO_W wide and HERO_H tall
 ship.outline = [SHIP_SHAPE(1,:) .* xScale; SHIP_SHAPE(2,:) .* yScale];
 
-heroPos = [100 150];
 fig = figure;
 set(fig,'color','black');
 set(fig,'Resize','off');
@@ -56,6 +55,6 @@ set(axisTitle, 'Color', title_color);
 %set size of the graphics window
 axis([0 200 0 324]);
 axis off;
-ship.patch = patch(NaN,NaN,'b');
+ship.patch = patch(NaN,NaN,'r');
 set(ship.patch,'LineWidth', 2);
-set(ship.patch,'EdgeColor', 'red');
+set(ship.patch,'EdgeColor', 'white');
