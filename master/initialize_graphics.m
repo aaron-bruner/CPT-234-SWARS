@@ -1,4 +1,4 @@
-function [mainAxis, ship, axisTitle] = initialize_graphics()
+function [mainAxis, ship, axisTitle, torpedo_object] = initialize_graphics()
 %initialize_graphics creates the graphic environment
 %Input arguments
 %   none
@@ -55,6 +55,19 @@ set(axisTitle, 'Color', title_color);
 %set size of the graphics window
 axis([0 200 0 324]);
 axis off;
+hold on
 ship.patch = patch(NaN,NaN,'r');
 set(ship.patch,'LineWidth', 2);
 set(ship.patch,'EdgeColor', 'white');
+
+%host torpedos
+TORPEDO_1_FACE_COLOR = [0.1 0.7 0.1];
+TORPEDO_1_EDGE_COLOR = [0.1 0.7 0.1];
+TORPEDO_1_SHAPE = 'd';
+TORPEDO_1_SIZE = 5;
+torpedo_object = plot(NaN,NaN);
+set(torpedo_object, 'Marker', TORPEDO_1_SHAPE);
+set(torpedo_object, 'MarkerFaceColor', TORPEDO_1_FACE_COLOR);
+set(torpedo_object, 'MarkerEdgeColor', TORPEDO_1_EDGE_COLOR);
+set(torpedo_object, 'MarkerSize', TORPEDO_1_SIZE);
+set(torpedo_object, 'LineStyle', 'None');
