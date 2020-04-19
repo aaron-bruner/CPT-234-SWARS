@@ -4,6 +4,11 @@ global quitGame;
 global right_button; 
 global left_button;
 quitGame = false;
+right_button = false;
+left_button = false;
+counter = [];
+
+
 
 [mainAxis, ship, axisTitle, torpedo_object] = initialize_graphics();
 
@@ -42,18 +47,16 @@ print_title(axisTitle, 'SWARS');
 %  i=i+1;
 %  disp(torpedoPos);
 % end
-
+torpedoPositions = [];
 while ~quitGame
     pause(0.025);
-    
-    if right_button == true
-        right_button = false;
-        moveObject(mainAxis, ship1, ship2, player);
-    end
-    if left_button == true
-        left_button = false;
-        moveTorpedos(player, mainAxis);
-    end
+    moveObject(mainAxis, ship1, ship2, player);
+    [torpedoPositions] = moveTorpedos(player, mainAxis, torpedoPositions, torpedo_object);
+    %shoot
+    %checkCollisions
+    %updateBars
+    %refreshPlots
+    counter = counter + 1;
 end % End while loop
 print_title(axisTitle, 'GAME OVER');
 
