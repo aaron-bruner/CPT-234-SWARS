@@ -157,27 +157,32 @@ end
                 p1Ship = fopen('1.txt', 'r');
                 ship1pos = fscanf(p1Ship, '%f %f');
                 fclose(p1Ship);
-        end
+            elseif player == 2
+                p2Ship = fopen('2.txt', 'r');
+                ship2pos = fscanf(p2Ship, '%f %f');
+                fclose(p2Ship);
+            end
         if player == 1
-
-
-            torpedoUV = (temptorpedo1Positions(3:4) - torpedoPos)/norm(temptorpedo1Positions(3:4) - torpedoPos);
+            torpedoUV = (mousePos - ship1pos)/norm(mousePos - ship1pos);
             p1velo = TORPEDO_SPEED * torpedoUV;
-            torpedo1Positions = [torpedo1Positions; torpedoPos(1) torpedoPos(2) p1velo(1) p1velo(2)];
+            torpedo1Positions(end+1, 1:2) = [p1Ship];
+            torpedo1Positions(end, 3:4) = [p1velo(1) p1velo(2)];
+            % Putting the values in p1torps so that player 2 can draw the
+            % torpedos on their screen
             p1torp = fopen('p1torps.txt', 'w');
-            fprintf(p1torp, '%f %f %f %f', torpedo1Positions');
+            fprintf(p1torp, '%f %f %f %f', torpedo1Positions);
             fclose(p1torp);
         elseif player == 2
-            temptorpedo2Positions(3:4) = get_mouse_position(mainAxis);
-            p2Ship = fopen('2.txt', 'r');
-            torpedoPos = fscanf(p2Ship, '%f %f');
-            fclose(p2Ship);
-            torpedoUV = (temptorpedo2Positions(3:4) - torpedoPos)/norm(temptorpedo2Positions(3:4) - torpedoPos);
+            torpedoUV = (mousePos - ship2Pos)/norm(mousePos - ship2Pos);
             p2velo = TORPEDO_SPEED * torpedoUV;
-            torpedo2Positions = [torpedo2Positions; torpedoPos(1) torpedoPos(2) p2velo(1) p2velo(2)];
+            torpedo2Positions(end+1, 1:2) = [torpedoPos(1) torpedoPos(2)];
+            torpedo2Positions(end, 3:4) = [p2velo(1) p2velo(2)];
+            % Putting the values in p2torps so that player 1 can draw the
+            % torpedos on their screen
             p2torp = fopen('p2torps.txt', 'w');
-            fprintf(p2torp, '%f %f %f %f', torpedo2Positions');
+            fprintf(p2torp, '%f %f %f %f', torpedo2Positions);
             fclose(p2torp);
+        end
         end
         %----------------------------------------------------------%
         
@@ -185,7 +190,7 @@ end
             if size(torpedo1Positions,1) ~= 0
                 torpedo1Positions(:,1:2) = torpedo1Positions(:,1:2) + torpedo1Positions(:,3:4);
                 p1torp = fopen('p1torps.txt', 'w');
-                fprintf(p1torp, '%f %f %f %f\n', torpedo1Positions');
+                fprintf(p1torp, '%f %f %f %f\n', torpedo1Positions);
                 fclose(p1torp);
                 draw_torpedos(torpedo1Positions(:,1:2), torpedo_object);
             end
@@ -193,7 +198,7 @@ end
             if size(torpedo2Positions,1) ~= 0
                 torpedo2Positions(:,1:2) = torpedo2Positions(:,1:2) + torpedo2Positions(:,3:4);
                 p2torp = fopen('p2torps.txt', 'w');
-                fprintf(p2torp, '%f %f %f %f\n', torpedo2Positions');
+                fprintf(p2torp, '%f %f %f %f\n', torpedo2Positions);
                 fclose(p2torp);
                 draw_torpedos(torpedo2Positions(:,1:2), torpedo_object);
             end
