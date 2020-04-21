@@ -1076,7 +1076,6 @@ encoreText = []; %used to display game over message. cleared by reset.
       if bulletCounter > 0
         bulletCounter = mod(bulletCounter + 1, BULLET_DELAY);
       elseif mouseDown
-        
         if energy - ENERGY_DRAIN >= 0 %only shoot if have enough energy
           bullets(1, end+1) = heroPos(1) + (HERO_W / 2);
           bullets(2, end) = heroPos(2) + HERO_H;
@@ -1087,11 +1086,6 @@ encoreText = []; %used to display game over message. cleared by reset.
             bullets(2, end) = heroPos(2) + HERO_H - SUPER_LAG;
           end
           bulletCounter = bulletCounter + 1;
-          energy = energy - ENERGY_DRAIN; %each shot drains energy
-          energyCounter = ENERGY_DELAY; %reset delay until restore enrgy
-          if energy < 0
-            energy = 0;
-          end
         end
         
       end
