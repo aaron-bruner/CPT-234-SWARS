@@ -16,10 +16,11 @@ function [] = mouseDownListener(src, ~)
 %   its input arguments are supplied by the figure.  The
 %   main usage would be to allow setting of a global variable
 %   to detect which mouse button was clicked.
-global right_button;
+global right_button; 
+global left_button;
     switch src.SelectionType
         case 'normal'
-            %put code here
+            left_button = true;
         case 'extend'
             %put code here
         case 'alt'
@@ -27,17 +28,3 @@ global right_button;
         case 'open'
             %put code here
     end
-    
-    
-    
-    
-%       On Linux, this means:
-%       'normal' : left mouse button clicked
-%       'extend' : shift+click left OR click middle
-%       'alt'    : ctrl+click left OR click right
-%       'open'   : double click any mouse button
-%       On Mac, this means:
-%       'normal' : left mouse button clicked
-%       'extend' : shift+click left OR click middle OR click both
-%       'alt'    : ctrl+click left OR click right
-%       'open'   : double click any mouse button
