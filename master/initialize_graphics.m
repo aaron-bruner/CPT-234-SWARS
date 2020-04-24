@@ -19,13 +19,6 @@ SHIP_SHAPE = [1 0 1 2 3 4 3 1; ... %x values
 xScale = ship.w / max(SHIP_SHAPE(1,:));
 yScale = ship.h / max(SHIP_SHAPE(2,:));
 
-% torpedos.w = 7;
-% torpedos.h = 15;
-% TORPEDOS_SHAPE = [1 0 1 2; 0 2 4 2];
-% xTorpScale = torpedos.w / max(TORPEDOS_SHAPE(1,:));
-% yTorpScale = torpedos.h / max(TORPEDOS_SHAPE(2,:));
-% torpedos.outline = [TORPEDOS_SHAPE(1,:) .* xTorpScale; TORPEDOS_SHAPE(2,:) .* yTorpScale];
-
 %coordinats for drawing hero at 0,0.
 %scale hero so that he's HERO_W wide and HERO_H tall
 ship.outline = [SHIP_SHAPE(1,:) .* xScale; SHIP_SHAPE(2,:) .* yScale];
@@ -66,9 +59,6 @@ hold on
 ship.patch = patch(NaN,NaN,'r');
 set(ship.patch,'LineWidth', 2);
 set(ship.patch,'EdgeColor', 'white');
-% torpedos.patch = patch(NaN,NaN,'g');
-% set(torpedos.patch,'LineWidth', 1);
-% set(torpedos.patch,'EdgeColor', 'green');
 
 %host torpedos
 TORPEDO_1_FACE_COLOR = [0.1 0.7 0.1];

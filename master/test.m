@@ -1,5 +1,7 @@
-torpArr = [0 0 0 0];
-fid = fopen('p1torps.txt', 'r');
-torpArr = fscanf(fid, '%f %f %f %f', torpArr(size(torpArr,1),:));
+x = [1 2 3 4; 6 7 8 9; 10 11 12 13; 0 0 0 0];
+writematrix(x,'test.txt','Delimiter','space');
+
+fid = fopen('test.txt', 'r');
+torpArr = fscanf(fid, '%f', [4 inf])';
 fclose(fid);
 disp(torpArr);
