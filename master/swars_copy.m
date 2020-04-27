@@ -1,4 +1,4 @@
-function [] = swars(player)
+function [] = swars_copy(player)
 
 global quitGame; global right_button; global left_button;
 quitGame = false; right_button = false; left_button = false;
@@ -8,7 +8,7 @@ quitGame = false; right_button = false; left_button = false;
 %------------------%
 MOVING = 0;
 SHIP_SPEED = 3.5;
-TORPEDO_SPEED = 7;
+TORPEDO_SPEED = 6;
 velo = 0;
 
 [mainAxis, ship, axisTitle, torpedo_object] = initialize_graphics();
@@ -26,12 +26,22 @@ set(ship2.patch,'EdgeColor', 'white');
 %-------------------------------------------------------------------------%
 %      Ensures that there are no left over values from last game          %
 %-------------------------------------------------------------------------%
+tempfid = fopen('1.txt', 'w'); fprintf(tempfid, '100 20'); fclose(tempfid);
+tempfid = fopen('2.txt', 'w'); fprintf(tempfid, '100 300'); fclose(tempfid);
 
-p1file = fopen('1.txt','w');
-p2file = fopen('2.txt','w');
+if player == 1
+p1file = fopen('1.txt','w+');
+p2file = fopen('2.txt','r');
 fprintf(p1file, '100 20');
+%fprintf(p2file, '100 300');
+frewind(p1file); %frewind(p2file);
+%fclose(p1file); fclose(p2file);
+elseif player == 2
+p1file = fopen('1.txt', 'r');
+p2file = fopen('2.txt', 'w+');
 fprintf(p2file, '100 300');
-fclose(p1file); fclose(p2file);
+frewind(p2file);
+end
 
 %-------------------------------------------------------------------------%
 %                Draw the ships at the starting points                    %
@@ -53,9 +63,15 @@ fclose(shortFid);
 %--------------------------------------------------------%
 % We want to delete any leftover torpedos from last game %
 %--------------------------------------------------------%
-delete p1torps.txt p2torps.txt
-fid = fopen('p1torps.txt', 'w'); fclose(fid);
-fid = fopen('p2torps.txt', 'w'); fclose(fid);
+%delete p1torps.txt p2torps.txt
+fid = fclose(fopen('p1torps.txt', 'w')); fid = fclose(fopen('p2torps.txt', 'w'));
+if player == 1
+p1torpsfid = fopen('p1torps.txt', 'w+'); %fclose(fid);
+p2torpsfid = fopen('p2torps.txt', 'r');
+elseif player == 2
+p2torpsfid = fopen('p2torps.txt', 'w+'); %fclose(fid);
+p1torpsfid = fopen('p1torps.txt', 'r');
+end
 
 %-------------------------------------------------------------------------%
 %            Pre-define the values that are going to be used              %
@@ -94,10 +110,16 @@ playerScores = [];
             p1Test = fopen('p1HitCheck.txt', 'r');
             p1HitTest = fscanf(p1Test, '%d');
             if p1HitTest == 1
-                player1 = fopen('1.txt', 'r');
-                ship1Positions(1:2) = fscanf(player1, '%f ', [2 inf])';
-                fclose(player1);
+                %player1 = fopen('1.txt', 'r');
+                randomShip1Position = [randi([50 150], 1), randi([15 75], 1)];
+                fprintf(p1file, '%f %f', randomShip1Position(1), randomShip1Position(2));
+                frewind(p1file);
+                ship1Positions(1:2) = fscanf(p1file, '%f ', [2 inf])';
+                frewind(p1file);
+                %fclose(player1);
                 draw_object(mainAxis, ship1, ship1Positions(1:2));
+                fclose(p1Test);
+                p1Test = fopen('p1HitCheck.txt', 'w');
                 fprintf(p1Test, '0');
             end
             fclose(p1Test);
@@ -105,9 +127,10 @@ playerScores = [];
             % We need to ensure that we have the corret  %
             %  positions before we give them velocity    %
             %--------------------------------------------%
-            player1 = fopen('1.txt', 'r');
-            ship1Positions(1:2) = fscanf(player1, '%f ', [2 inf])';
-            fclose(player1);
+            %player1 = fopen('1.txt', 'r');
+            ship1Positions(1:2) = fscanf(p1file, '%f ', [2 inf])';
+            frewind(p1file);
+            %fclose(player1);
             
         elseif player == 2
             %---------------------------------------------------%
@@ -117,10 +140,16 @@ playerScores = [];
             p2Test = fopen('p2HitCheck.txt', 'r');
             p2HitTest = fscanf(p2Test, '%d');
             if p2HitTest == 1
-                player2 = fopen('2.txt', 'r');
-                ship2Positions(1:2) = fscanf(player2, '%f ', [2 inf])';
-                fclose(player2);
+                %player2 = fopen('2.txt', 'r');
+                randomShip2Position = [randi([50 150], 1), randi([250 300], 1)];
+                fprintf(p2file, '%f %f', randomShip2Position(1), randomShip2Position(2));
+                frewind(p2file);
+                ship2Positions(1:2) = fscanf(p2file, '%f ', [2 inf])';
+                frewind(p2file);
+                %fclose(player2);
                 draw_object(mainAxis, ship2, ship2Positions(1:2));
+                fclose(p2Test);
+                p2Test = fopen('p2HitCheck.txt', 'w');
                 fprintf(p2Test, '0');
             end
             fclose(p2Test);
@@ -128,9 +157,10 @@ playerScores = [];
             % We need to ensure that we have the corret  %
             %  positions before we give them velocity    %
             %--------------------------------------------%
-            player2 = fopen('2.txt', 'r');
-            ship2Positions(1:2) = fscanf(player2, '%f ', [2 inf])';
-            fclose(player2);
+            %player2 = fopen('2.txt', 'r');
+            ship2Positions(1:2) = fscanf(p2file, '%f ', [2 inf])';
+            frewind(p2file);
+            %fclose(player2);
         end
 
 %-------------------------------------------------------------------------%
@@ -149,9 +179,10 @@ playerScores = [];
         %---------------------------------------------%
         % Write the position to the file for player 2 %
         %---------------------------------------------%
-        player1 = fopen('1.txt', 'w');
-        fprintf(player1, '%f %f', ship1Positions(1), ship1Positions(2));
-        fclose(player1);
+        %player1 = fopen('1.txt', 'w');
+        fprintf(p1file, '%f %f', ship1Positions(1), ship1Positions(2));
+        frewind(p1file);
+        %fclose(player1);
         %----------------------------------------------------------%
         % Keep drawing the ship until we reach the mouse locaiton  %
         %----------------------------------------------------------%
@@ -165,9 +196,10 @@ playerScores = [];
 %-----------------------------------------------------------------%
 %  Just draw player 2's ship while we determine where player 1 is %
 %-----------------------------------------------------------------%
-    player2 = fopen('2.txt', 'r');
-    tempship2Positions = fscanf(player2, '%f %f');
-    fclose(player2);
+    %player2 = fopen('2.txt', 'r');
+    tempship2Positions = fscanf(p2file, '%f %f');
+    frewind(p2file);
+    %fclose(player2);
     draw_object(mainAxis, ship2, tempship2Positions);
 %-------------------------------------------------------------------------%
 %       This is the beginning of the new movement call for player 2       %
@@ -186,9 +218,10 @@ playerScores = [];
         %---------------------------------------------%
         % Write the position to the file for player 2 %
         %---------------------------------------------%
-        player2 = fopen('2.txt', 'w');
-        fprintf(player2, '%f %f', ship2Positions(1), ship2Positions(2));
-        fclose(player2);
+        %player2 = fopen('2.txt', 'w');
+        fprintf(p2file, '%f %f', ship2Positions(1), ship2Positions(2));
+        frewind(p2file);
+        %fclose(player2);
         %----------------------------------------------------------%
         % Keep drawing the ship until we reach the mouse locaiton  %
         %----------------------------------------------------------%
@@ -203,9 +236,10 @@ playerScores = [];
     % Just draw player 1's ship while %
     % we determine where player 2 is. %
     %---------------------------------%
-    player1 = fopen('1.txt', 'r');
-    tempShip1Positions = fscanf(player1, '%f %f');
-    fclose(player1);
+    %player1 = fopen('1.txt', 'r');
+    tempShip1Positions = fscanf(p1file, '%f %f');
+    frewind(p1file);
+    %fclose(player1);
     draw_object(mainAxis, ship1, tempShip1Positions);
     %---------------------------------%
     end
@@ -256,13 +290,15 @@ playerScores = [];
         %----------------------------------------------------%
         mousePos = get_mouse_position(mainAxis);
         if player == 1
-            p1Ship = fopen('1.txt', 'r');
-            ship1pos = fscanf(p1Ship, '%f %f', [2 inf])';
-            fclose(p1Ship);
+            %p1Ship = fopen('1.txt', 'r');
+            ship1pos = fscanf(p1file, '%f %f', [2 inf])';
+            frewind(p1file);
+            %fclose(p1Ship);
         elseif player == 2
-            p2Ship = fopen('2.txt', 'r');
-            ship2pos = fscanf(p2Ship, '%f %f', [2 inf])';
-            fclose(p2Ship);
+            %p2Ship = fopen('2.txt', 'r');
+            ship2pos = fscanf(p2file, '%f %f', [2 inf])';
+            frewind(p2file);
+            %fclose(p2Ship);
         end
         %--------------------------------------------------------%
         % Now, depending on which player it is, we want to add a %
@@ -297,9 +333,10 @@ playerScores = [];
      %                draw the opponents torpedos               %
      %----------------------------------------------------------%
     if player == 1
-        p2fid = fopen('p2torps.txt', 'r');
-        torpedo2 = fscanf(p2fid, '%f', [4 inf])';
-        fclose(p2fid);
+        %p2fid = fopen('p2torps.txt', 'r');
+        torpedo2 = fscanf(p2torpsfid, '%f', [4 inf])';
+        frewind(p2torpsfid);
+        %fclose(p2fid);
         if size(torpedo2,1) ~= 0
             draw_torpedos(torpedo2(:,1:2), torpedo_object);
         end
@@ -313,9 +350,10 @@ playerScores = [];
             draw_torpedos(torpedo1Positions(:,1:2), torpedo_object);
         end
     elseif player == 2
-        p1fid = fopen('p1torps.txt', 'r');
-        torpedo1 = fscanf(p1fid, '%f', [4 inf])';
-        fclose(p1fid);
+        %p1fid = fopen('p1torps.txt', 'r');
+        torpedo1 = fscanf(p1torpsfid, '%f', [4 inf])';
+        frewind(p1torpsfid);
+        %fclose(p1fid);
         if size(torpedo1,1) ~= 0
             draw_torpedos(torpedo1(:,1:2), torpedo_object);
         end
@@ -341,9 +379,10 @@ playerScores = [];
         %           them to player 2's ship position.           %
         %-------------------------------------------------------%
         if player == 1
-            p2id = fopen('2.txt', 'r');
-            p2pos = fscanf(p2id, '%f %f');
-            fclose(p2id);
+            %p2id = fopen('2.txt', 'r');
+            p2pos = fscanf(p2file, '%f %f');
+            frewind(p2file);
+            %fclose(p2id);
             %--------------------------------%
             % Using a for loop to go through %
             %    each torpedo position and   %
@@ -372,19 +411,21 @@ playerScores = [];
                 %-----------------------------------------------------%
                 %       Move player 2's ship to a random position     %
                 %-----------------------------------------------------%
-                fid = fopen('2.txt', 'w');
-                randomShip2Position = [randi([50 150], 1), randi([250 300], 1)];
-                fprintf(fid, '%f %f', randomShip2Position(1), randomShip2Position(2));
-                fclose(fid);
+%                 fid = fopen('2.txt', 'w');
+%                 randomShip2Position = [randi([50 150], 1), randi([250 300], 1)];
+%                 fprintf(p2file, '%f %f', randomShip2Position(1), randomShip2Position(2));
+%                 frewind(p2file);
+%                 fclose(fid);
                 fid = fopen('p2hitCheck.txt', 'w');
                 fprintf(fid, '1');
                 fclose(fid);
             end
             end
         elseif player == 2
-            p1id = fopen('1.txt', 'r');
-            p1pos = fscanf(p1id, '%f %f');
-            fclose(p1id);
+            %p1id = fopen('1.txt', 'r');
+            p1pos = fscanf(p1file, '%f %f');
+            frewind(p1file);
+            %fclose(p1id);
             %--------------------------------%
             % Using a for loop to go through %
             %    each torpedo position and   %
@@ -413,10 +454,11 @@ playerScores = [];
                     %-----------------------------------------------------%
                     %       Move player 1 ship to a random position       %
                     %-----------------------------------------------------%
-                    fid = fopen('1.txt', 'w');
-                    randomShip1Position = [randi([50 150], 1), randi([15 75], 1)];
-                    fprintf(fid, '%f %f', randomShip1Position(1), randomShip1Position(2));
-                    fclose(fid);
+%                     fid = fopen('1.txt', 'w');
+%                     randomShip1Position = [randi([50 150], 1), randi([15 75], 1)];
+%                     fprintf(p1file, '%f %f', randomShip1Position(1), randomShip1Position(2));
+%                     frewind(p1file);
+%                     fclose(fid);
                     fid = fopen('p1hitCheck.txt', 'w');
                     fprintf(fid, '1');
                     fclose(fid);
@@ -500,5 +542,6 @@ while ~quitGame
         print_title(axisTitle, 'GAME OVER - NO WINNER');
     end
 end % End main while loop
+fclose(p1file); fclose(p2file); fclose(p1torpsfid); fclose(p2torpsfid);
 end % End swars function
 %-------------------------------------------------------------------------%
