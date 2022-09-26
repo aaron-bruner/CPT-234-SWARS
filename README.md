@@ -1,4 +1,4 @@
-# swars
+# SWARS
 EGR-270-102 Final Project
 
                                                         SWARS
