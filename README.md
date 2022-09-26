@@ -1,4 +1,6 @@
-# SWARS
+This project is heavily outdated and is being archived for read-only purposes.
+
+# SWARS [ARCHIVE]
 EGR-270-102 Final Project
 
                                                         SWARS
